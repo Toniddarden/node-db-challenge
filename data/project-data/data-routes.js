@@ -13,93 +13,76 @@ router.get('/projects', (req, res) => {
     });
   });
 
-  
-  router.post('/projects', (req, res) => {
-    const projectData = req.body;
-  
-    data.addProject(projectData)
-    .then(added => {
-      res.status(201).json(added);
-    })
-    .catch (err => {
-      res.status(500).json({ message: 'Failed to create new project' });
-    });
-  });
-  
-
-
-
-// posting resources
-  router.post('/:id/resources', (req, res) => {
-    const resData = req.body;
-    const { id } = req.params; 
-  
-    Schemes.findByResId(id)
-    .then(res => {
-      if (res) {
-        data.addResource(resData, id)
-        .then(added => {
-          res.status(201).json(added);
-        })
-      } else {
-        res.status(404).json({ message: 'Could not find resource with given id.' })
-      }
-    })
-    .catch (err => {
-      res.status(500).json({ message: 'Failed to create new resource' }, err);
-    });
-  });
-// getting resources
-  router.get('/:id/resources', (req, res) => {
-    const { id } = req.params;
-    data.findByResId(id)
-    .then(reso => {
-        if (reso.length) {
-          res.json(reso);
-        } else {
-          res.status(404).json({ message: 'Could not find resources for given project' })
-        }
+router.post("/projects", (req, res) => {
+    const body = req.body;
+    data.addProject(body)
+    if(body != true){
+      res.status(400).json({error: 'Please provide __for the post.'})
+    } else {
+        data.addProject(body)
+        .then((complete) => {
+          res.status(201).json(complete)
+        }) .catch(err=>{
+          console.log(err)
+          res.status(500).json({error: "There was an error while saving the post to the database", error:err})
       })
-      .catch(err => {
-        res.status(500).json({ message: 'Failed to get resources' }, err);
-      });
-    });
-// ----------------
-// adding/posting tasks
-router.post('/:id/tasks', (req, res) => {
-    const taskData = req.body;
-    const { id } = req.params; 
-  
-    Schemes.findByTaskId(id)
-    .then(tk => {
-      if (tk) {
-        data.addTask(taskData, id)
-        .then(added => {
-          res.status(201).json(added);
-        })
-      } else {
-        res.status(404).json({ message: 'Could not find task with given id.' })
-      }
+    }
+  });
+// ------------------------------------------------------------------------------------------------
+// getting resources
+router.get('/resources', (req, res) => {
+    data.findResource()
+    .then(data => {
+      res.json(data);
     })
-    .catch (err => {
-      res.status(500).json({ message: 'Failed to create new task' }, err);
+    .catch(err => {
+      res.status(500).json({ message: 'Failed to get projects' });
+    });
+  });
+// posting resources
+  router.post('/resources', (req, res) => {
+    const body = req.body;
+    data.addResource(body)
+    if(body != true){
+      res.status(400).json({error: 'Please provide __for the resource.'})
+    } else {
+        data.addResource(body)
+        .then((complete) => {
+          res.status(201).json(complete)
+        }) .catch(err=>{
+          console.log(err)
+          res.status(500).json({error: "There was an error while saving the resource to the database", error:err})
+      })
+    }
+  });
+
+// ------------------------------------------------------------------------------------------------
+// adding/posting tasks
+router.get('/tasks', (req, res) => {
+    data.findTask()
+    .then(data => {
+      res.json(data);
+    })
+    .catch(err => {
+      res.status(500).json({ message: 'Failed to get tasks' });
     });
   });
 // getting tasks
-  router.get('/:id/resources', (req, res) => {
-    const { id } = req.params;
-    data.findByTaskId(id)
-    .then(tk => {
-        if (tk.length) {
-          res.json(tk);
-        } else {
-          res.status(404).json({ message: 'Could not find task for given project' })
-        }
+  router.post('/tasks', (req, res) => {
+    const body = req.body;
+    data.addTask(body)
+    if(body != true){
+      res.status(400).json({error: 'Please provide __for the task.'})
+    } else {
+        data.addTask(body)
+        .then((complete) => {
+          res.status(201).json(complete)
+        }) .catch(err=>{
+          console.log(err)
+          res.status(500).json({error: "There was an error while saving the task to the database", error:err})
       })
-      .catch(err => {
-        res.status(500).json({ message: 'Failed to get task' }, err);
-      });
-    });
+    }
+  });
 
 
 
