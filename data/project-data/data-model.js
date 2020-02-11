@@ -6,24 +6,23 @@ function find() {
     return db('project')
  }
 
-function addProject(pj) {
-    return db('project')
-      .insert(pj, 'id')
-      .then(ids => ({ id: ids[0] }));
-  }
+ function addProject(projects) {
+    return db('project').insert(projects)
+}
 // RESOURCE
 function findResource() {
     return db('resource')
 }
- function addResource(source) {
-    return db('resource').insert(source, 'id').then(sources => ({id: sources[0]}))
+ function addResource(Resources) {
+    return db('resource').insert(Resources)
+
 }
 // TASK
 function findTask() {
     return db('task')
 }
 function addTask(tasks) {
-    return db('task').insert(tasks, 'id').then(tasks => ({id: tasks[0]}))
+    return db('task').insert(tasks)
 }
 
 
